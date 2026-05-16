@@ -14,10 +14,13 @@ class TweetResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'user_id' => $this->user_id,
             'body' => $this->body,
             'user' => [
                 'id' => $this->user->id,
                 'name' => $this->user->name,
+                'username' => $this->user->username,
+                'avatar' => $this->user->avatar,
             ],
             'created_at' => $this->created_at,
         ];
