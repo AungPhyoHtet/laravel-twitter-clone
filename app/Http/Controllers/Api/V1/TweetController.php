@@ -14,7 +14,7 @@ class TweetController extends Controller
 {
     public function index(): AnonymousResourceCollection
     {
-        $tweets = Tweet::with('user')->latest()->paginate();
+        $tweets = Tweet::with('user')->latest()->paginate(10);
 
         return TweetResource::collection($tweets);
     }

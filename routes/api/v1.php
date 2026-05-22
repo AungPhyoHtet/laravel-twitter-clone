@@ -1,10 +1,17 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\TweetController;
+use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::apiResource('tweets', TweetController::class)->only(['index', 'show']);
+// Public routes
+Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware('auth')->group(function () {
-    Route::apiResource('tweets', TweetController::class)->only(['store', 'destroy']);
+// Authenticated routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/users/{id}', [UserController::class, 'show']);
+    Route::get('/users/{id}/tweets', [UserController::class, 'tweets']);
+    Route::apiResource('tweets', TweetController::class)->only(['index', 'show', 'store', 'destroy']);
 });

@@ -3,37 +3,45 @@
 use App\Models\Tweet;
 use App\Models\User;
 
-test('guests can list latest tweets', function () {
+test('authenticated user can list latest tweets', function () {
+    $user = User::factory()->create();
     Tweet::factory()->count(3)->create();
 
-    $this->getJson('/api/v1/tweets')
+    $this->actingAs($user)
+        ->getJson('/api/v1/tweets')
         ->assertOk()
         ->assertJsonCount(3, 'data')
         ->assertJsonStructure(['data' => [['id', 'body', 'user', 'created_at']]]);
 });
 
 test('tweets are returned in latest order', function () {
+    $user = User::factory()->create();
     $first = Tweet::factory()->create(['created_at' => now()->subMinutes(5)]);
     $second = Tweet::factory()->create(['created_at' => now()]);
 
-    $ids = $this->getJson('/api/v1/tweets')
+    $ids = $this->actingAs($user)
+        ->getJson('/api/v1/tweets')
         ->assertOk()
         ->json('data.*.id');
 
     expect($ids)->toBe([$second->id, $first->id]);
 });
 
-test('guests can view a single tweet', function () {
+test('authenticated user can view a single tweet', function () {
+    $user = User::factory()->create();
     $tweet = Tweet::factory()->create();
 
-    $this->getJson("/api/v1/tweets/{$tweet->id}")
+    $this->actingAs($user)
+        ->getJson("/api/v1/tweets/{$tweet->id}")
         ->assertOk()
         ->assertJsonPath('data.id', $tweet->id);
 });
 
-test('guests cannot create or delete tweets', function () {
+test('guests cannot access any tweet endpoints', function () {
     $tweet = Tweet::factory()->create();
 
+    $this->getJson('/api/v1/tweets')->assertUnauthorized();
+    $this->getJson("/api/v1/tweets/{$tweet->id}")->assertUnauthorized();
     $this->postJson('/api/v1/tweets')->assertUnauthorized();
     $this->deleteJson("/api/v1/tweets/{$tweet->id}")->assertUnauthorized();
 });
