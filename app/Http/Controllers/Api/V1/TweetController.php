@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\StoreTweetRequest;
 use App\Http\Resources\Api\V1\TweetResource;
 use App\Models\Tweet;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
@@ -26,8 +27,14 @@ class TweetController extends Controller
         return new TweetResource($tweet->load('user'));
     }
 
-    public function show(Tweet $tweet): TweetResource
+    public function show(int $id): TweetResource|JsonResponse
     {
+        $tweet = Tweet::find($id);
+
+        if (! $tweet) {
+            return response()->json(['message' => 'Tweet not found.'], 404);
+        }
+
         return new TweetResource($tweet->load('user'));
     }
 

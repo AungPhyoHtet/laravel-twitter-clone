@@ -37,6 +37,13 @@ test('authenticated user can view a single tweet', function () {
         ->assertJsonPath('data.id', $tweet->id);
 });
 
+test('returns 404 with message for non-existent tweet', function () {
+    $this->actingAs(User::factory()->create())
+        ->getJson('/api/v1/tweets/999')
+        ->assertNotFound()
+        ->assertJsonPath('message', 'Tweet not found.');
+});
+
 test('guests cannot access any tweet endpoints', function () {
     $tweet = Tweet::factory()->create();
 
