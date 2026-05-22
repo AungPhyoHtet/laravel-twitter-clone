@@ -51,7 +51,7 @@ class AuthController extends Controller
             'device_name' => ['required', 'string'],
         ]);
 
-        $user = User::create($data);
+        $user = User::create($request->only('name', 'username', 'email', 'password'));
 
         $token = $user->createToken($request->device_name)->plainTextToken;
 
