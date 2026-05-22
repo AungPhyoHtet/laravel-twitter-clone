@@ -2,6 +2,60 @@
 
 use App\Models\User;
 
+test('user can register and receive a token', function () {
+    $this->postJson('/api/v1/register', [
+        'name' => 'John Doe',
+        'username' => 'johndoe',
+        'email' => 'john@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+        'device_name' => 'iPhone 15',
+    ])
+        ->assertCreated()
+        ->assertJsonStructure(['token', 'user' => ['id', 'name', 'username', 'email', 'avatar']])
+        ->assertJsonPath('user.username', 'johndoe');
+
+    $this->assertDatabaseHas('users', ['email' => 'john@example.com', 'username' => 'johndoe']);
+});
+
+test('register validates required fields', function (array $payload) {
+    $this->postJson('/api/v1/register', $payload)->assertUnprocessable();
+})->with([
+    'missing name' => [['username' => 'johndoe', 'email' => 'john@example.com', 'password' => 'password', 'password_confirmation' => 'password', 'device_name' => 'iPhone 15']],
+    'missing username' => [['name' => 'John Doe', 'email' => 'john@example.com', 'password' => 'password', 'password_confirmation' => 'password', 'device_name' => 'iPhone 15']],
+    'missing email' => [['name' => 'John Doe', 'username' => 'johndoe', 'password' => 'password', 'password_confirmation' => 'password', 'device_name' => 'iPhone 15']],
+    'missing password' => [['name' => 'John Doe', 'username' => 'johndoe', 'email' => 'john@example.com', 'device_name' => 'iPhone 15']],
+    'missing device_name' => [['name' => 'John Doe', 'username' => 'johndoe', 'email' => 'john@example.com', 'password' => 'password', 'password_confirmation' => 'password']],
+]);
+
+test('register fails with duplicate email or username', function () {
+    User::factory()->create(['email' => 'john@example.com', 'username' => 'johndoe']);
+
+    $this->postJson('/api/v1/register', [
+        'name' => 'Another User',
+        'username' => 'johndoe',
+        'email' => 'john@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+        'device_name' => 'iPhone 15',
+    ])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['email', 'username']);
+});
+
+test('register fails when passwords do not match', function () {
+    $this->postJson('/api/v1/register', [
+        'name' => 'John Doe',
+        'username' => 'johndoe',
+        'email' => 'john@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'different',
+        'device_name' => 'iPhone 15',
+    ])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['password']);
+});
+
 test('user can login and receive a token', function () {
     $user = User::factory()->create();
 
