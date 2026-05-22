@@ -53,7 +53,18 @@ test('register fails when passwords do not match', function () {
         'device_name' => 'iPhone 15',
     ])
         ->assertUnprocessable()
-        ->assertJsonValidationErrors(['password']);
+        ->assertJsonValidationErrorFor('password')
+        ->assertJsonPath('errors.password.0', 'Password confirmation does not match.');
+});
+
+test('register returns proper error messages', function () {
+    $this->postJson('/api/v1/register', [])
+        ->assertUnprocessable()
+        ->assertJsonPath('errors.name.0', 'Name is required.')
+        ->assertJsonPath('errors.username.0', 'Username is required.')
+        ->assertJsonPath('errors.email.0', 'Email is required.')
+        ->assertJsonPath('errors.password.0', 'Password is required.')
+        ->assertJsonPath('errors.device_name.0', 'Device name is required.');
 });
 
 test('user can login and receive a token', function () {

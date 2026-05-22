@@ -43,15 +43,28 @@ class AuthController extends Controller
 
     public function register(Request $request): JsonResponse
     {
-        $data = $request->validate([
+        $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'email', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password_confirmation' => ['required', 'string'],
             'device_name' => ['required', 'string'],
+        ], [
+            'name.required' => 'Name is required.',
+            'username.required' => 'Username is required.',
+            'username.unique' => 'This username is already taken.',
+            'email.required' => 'Email is required.',
+            'email.email' => 'Please provide a valid email address.',
+            'email.unique' => 'This email is already registered.',
+            'password.required' => 'Password is required.',
+            'password.min' => 'Password must be at least 8 characters.',
+            'password.confirmed' => 'Password confirmation does not match.',
+            'password_confirmation.required' => 'Password confirmation is required.',
+            'device_name.required' => 'Device name is required.',
         ]);
 
-        $user = User::create($request->only('name', 'username', 'email', 'password'));
+        $user = User::create($request->only(['name', 'username', 'email', 'password']));
 
         $token = $user->createToken($request->device_name)->plainTextToken;
 
