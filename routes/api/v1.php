@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\FeedController;
+use App\Http\Controllers\Api\V1\FollowController;
 use App\Http\Controllers\Api\V1\TweetController;
 use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
@@ -14,5 +16,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/users/{id}', [UserController::class, 'show']);
     Route::get('/users/{id}/tweets', [UserController::class, 'tweets']);
+    Route::post('/users/{id}/follow', [FollowController::class, 'store']);
+    Route::delete('/users/{id}/follow', [FollowController::class, 'destroy']);
+    Route::get('/users/{id}/followers', [FollowController::class, 'followers']);
+    Route::get('/users/{id}/following', [FollowController::class, 'following']);
+    Route::get('/feed', [FeedController::class, 'index']);
     Route::apiResource('tweets', TweetController::class)->only(['index', 'show', 'store', 'destroy']);
 });

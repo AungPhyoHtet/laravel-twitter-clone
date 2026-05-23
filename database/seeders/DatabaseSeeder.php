@@ -32,5 +32,13 @@ class DatabaseSeeder extends Seeder
         Tweet::factory(40)->create();
 
         Tweet::factory(20)->create(['user_id' => 1]);
+
+        $users = User::all();
+
+        $users->each(function (User $user) use ($users) {
+            $users->where('id', '!=', $user->id)
+                ->random(rand(1, 4))
+                ->each(fn (User $target) => $user->following()->syncWithoutDetaching($target->id));
+        });
     }
 }
