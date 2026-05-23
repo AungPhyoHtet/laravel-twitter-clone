@@ -52,5 +52,11 @@ All endpoints are versioned under `/api/v1`. Authentication uses Sanctum bearer 
 | `POST` | `/api/v1/tweets` | Create a tweet |
 | `GET` | `/api/v1/tweets/{id}` | Get a tweet |
 | `DELETE` | `/api/v1/tweets/{id}` | Delete a tweet |
+| `GET` | `/api/v1/tweets/search?q=` | Search tweets |
 
-See [`docs/api/`](docs/api/) for detailed endpoint documentation.
+### Detailed documentation
+
+- [Authentication](docs/api/auth.md)
+- [Users](docs/api/users.md)
+- [Tweets](docs/api/tweets.md)
+- [Follows & Feed](docs/api/follows.md)
