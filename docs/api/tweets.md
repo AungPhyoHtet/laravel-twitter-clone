@@ -167,14 +167,14 @@ DELETE /api/v1/tweets/{id}
 Searches tweet body text. Case-insensitive, paginated, ordered newest first.
 
 ```
-GET /api/v1/tweets/search?q={keyword}
+GET /api/v1/tweets/search?search={keyword}
 ```
 
 **Query parameters**
 
 | Parameter | Required | Description |
 |-----------|----------|-------------|
-| `q` | Yes | Keyword to search in tweet body |
+| `search` | Yes | Keyword to search in tweet body |
 
 **Response `200`** — same structure as list tweets.
 
@@ -182,9 +182,9 @@ GET /api/v1/tweets/search?q={keyword}
 
 ```json
 {
-  "message": "The q field is required.",
+  "message": "The search field is required.",
   "errors": {
-    "q": ["The q field is required."]
+    "search": ["The search field is required."]
   }
 }
 ```
