@@ -57,29 +57,6 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 
 - You must only create documentation files if explicitly requested by the user.
 
-## Git Commits
-
-Use Conventional Commits format: `type: short description`
-
-- `feat:` — new feature
-- `fix:` — bug fix
-- `refactor:` — code change with no behavior change
-- `chore:` — tooling, dependencies, config
-- `docs:` — documentation only
-- `test:` — adding or updating tests
-- `style:` — formatting, no logic change
-- `hotfix:` — urgent production fix
-
-Examples:
-- `feat: add register user API`
-- `fix: return 404 message for non-existent tweet`
-- `chore: install laravel ide-helper`
-
-## Git Workflow
-
-- Always ask the user before committing and pushing.
-- Never include `Co-Authored-By` lines in commit messages.
-
 ## Replies
 
 - Be concise in your explanations - focus on what's important rather than explaining obvious details.
@@ -236,3 +213,26 @@ Use Wayfinder to generate TypeScript functions for Laravel routes. Import from `
 - IMPORTANT: Activate `inertia-react-development` when working with Inertia React client-side patterns.
 
 </laravel-boost-guidelines>
+
+## Git Commits
+
+Use Conventional Commits format: `type: short description`
+
+- `feat:` — new feature
+- `fix:` — bug fix
+- `refactor:` — code change with no behavior change
+- `chore:` — tooling, dependencies, config
+- `docs:` — documentation only
+- `test:` — adding or updating tests
+- `style:` — formatting, no logic change
+- `hotfix:` — urgent production fix
+
+Examples:
+- `feat: add register user API`
+- `fix: return 404 message for non-existent tweet`
+- `chore: install laravel ide-helper`
+
+## Git Workflow
+
+- Always ask the user before committing and pushing.
+- Never include `Co-Authored-By` lines in commit messages.
