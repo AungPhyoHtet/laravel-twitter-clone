@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\V1\TweetResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UserController extends Controller
 {
-    public function show(int $id): JsonResponse
+    public function show(Request $request, int $id): JsonResponse
     {
         $user = User::find($id);
 
@@ -28,6 +29,9 @@ class UserController extends Controller
             'link' => $user->link,
             'link_text' => $user->link_text,
             'created_at' => $user->created_at,
+            'followers_count' => $user->followers()->count(),
+            'following_count' => $user->following()->count(),
+            'is_following' => $request->user()->following()->where('following_id', $user->id)->exists(),
             'tweets' => $user->tweets()->latest()->get(['id', 'body', 'created_at']),
         ]);
     }
