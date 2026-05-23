@@ -21,5 +21,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users/{id}/followers', [FollowController::class, 'followers']);
     Route::get('/users/{id}/following', [FollowController::class, 'following']);
     Route::get('/feed', [FeedController::class, 'index']);
+    Route::get('/tweets/search', [TweetController::class, 'search']);
     Route::apiResource('tweets', TweetController::class)->only(['index', 'show', 'store', 'destroy']);
 });
