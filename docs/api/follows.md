@@ -66,8 +66,20 @@ GET /api/v1/users/{id}/followers
       "avatar": null
     }
   ],
-  "links": { ... },
-  "meta": { ... }
+  "links": {
+    "first": "http://laravel-twitter-clone.test/api/v1/users/1/followers?page=1",
+    "last": "http://laravel-twitter-clone.test/api/v1/users/1/followers?page=3",
+    "prev": null,
+    "next": "http://laravel-twitter-clone.test/api/v1/users/1/followers?page=2"
+  },
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 3,
+    "per_page": 10,
+    "to": 10,
+    "total": 25
+  }
 }
 ```
 
@@ -111,8 +123,20 @@ GET /api/v1/feed
       "created_at": "2026-05-23T13:00:00.000000Z"
     }
   ],
-  "links": { ... },
-  "meta": { ... }
+  "links": {
+    "first": "http://laravel-twitter-clone.test/api/v1/feed?page=1",
+    "last": "http://laravel-twitter-clone.test/api/v1/feed?page=5",
+    "prev": null,
+    "next": "http://laravel-twitter-clone.test/api/v1/feed?page=2"
+  },
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 5,
+    "per_page": 10,
+    "to": 10,
+    "total": 44
+  }
 }
 ```
 
@@ -120,7 +144,15 @@ Returns an empty `data` array when the user follows nobody.
 
 ---
 
-## Error response format
+## Error responses
+
+| Scenario | Status | Message |
+|----------|--------|---------|
+| Unauthenticated | 401 | `Unauthenticated.` |
+| User not found | 404 | `User not found.` |
+| Self-follow | 422 | `You cannot follow yourself.` |
+| Already following | 422 | `You are already following this user.` |
+| Not following | 422 | `You are not following this user.` |
 
 ```json
 {
