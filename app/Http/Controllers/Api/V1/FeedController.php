@@ -12,8 +12,13 @@ class FeedController extends Controller
 {
     public function index(Request $request): AnonymousResourceCollection
     {
+        $followingIds = $request->user()->following()->select('users.id');
+
         $tweets = Tweet::with('user')
-            ->whereIn('user_id', $request->user()->following()->select('users.id'))
+            ->where(function ($query) use ($request, $followingIds) {
+                $query->whereIn('user_id', $followingIds)
+                    ->orWhere('user_id', $request->user()->id);
+            })
             ->latest()
             ->paginate(10);
 

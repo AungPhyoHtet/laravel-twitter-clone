@@ -23,6 +23,7 @@ class TweetResource extends JsonResource
                 'avatar' => $this->user->avatar,
             ],
             'created_at' => $this->created_at,
+            'is_pinned' => $request->user()?->pinned_tweet_id === $this->id,
         ];
     }
 }

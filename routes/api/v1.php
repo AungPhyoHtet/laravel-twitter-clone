@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\FeedController;
 use App\Http\Controllers\Api\V1\FollowController;
+use App\Http\Controllers\Api\V1\PinController;
 use App\Http\Controllers\Api\V1\TweetController;
 use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
@@ -23,4 +24,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/feed', [FeedController::class, 'index']);
     Route::get('/tweets/search', [TweetController::class, 'search']);
     Route::apiResource('tweets', TweetController::class)->only(['index', 'show', 'store', 'destroy']);
+    Route::post('/tweets/{tweet}/pin', [PinController::class, 'store']);
+    Route::delete('/tweets/{tweet}/pin', [PinController::class, 'destroy']);
 });
